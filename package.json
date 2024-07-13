@@ -16,7 +16,7 @@
     "dev": "ts-node ./src/main.ts",
     "dev:init": "ts-node ./src/main.ts --init",
     "dev:version": "ts-node ./src/main.ts --version",
-    "release:patch": "pnpm build && pnpm version patch && pnpm build && npm publish && git push --follow-tags"
+    "release:patch": "pnpm version patch && pnpm build && npm publish && git push --follow-tags"
   },
   "author": "Ian <https://github.com/cyb1999>",
   "license": "ISC",
