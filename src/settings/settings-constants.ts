@@ -2,6 +2,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+import { schemaDirname } from '../ai-response-schema';
+
 const homeDir = os.homedir();
 const cpuArchitecture = os.arch();
 const osPlatform = os.platform();
@@ -12,7 +14,7 @@ export const settingsFileName = `settings.json`;
 export const settingsFilePath = `${settingsDir}/${settingsFileName}`;
 
 const schemaString = fs.readFileSync(
-  path.join(__dirname, '../ai-response-schema.ts'),
+  path.join(schemaDirname, 'ai-response-schema.ts'),
   'utf8'
 );
 
@@ -31,7 +33,7 @@ export const systemPrompt = `You are a command line translation program. You can
 4.If this is a dangerous command, change isDangerous to true without any additional warning or prompt.
 
 Respond only in JSON that satisfies the Response type:
-${schemaString}
+${schemaString.replace(/^(import|export) .*;$/gm, '').trim()}
 
 User System Info:\n${JSON.stringify(
   { cpuArchitecture, osPlatform, osType, kernelVersion },

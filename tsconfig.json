@@ -4,7 +4,7 @@
     "outDir": "dist",
     "strict": true,
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ES2022",
     "resolveJsonModule": true,
     "sourceMap": true,
     "esModuleInterop": true,
@@ -13,5 +13,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules"]
 }

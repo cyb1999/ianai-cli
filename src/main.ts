@@ -43,6 +43,7 @@ program
   .arguments('[args...]')
   .description('Send a message to a ai')
   .action(async (message, cmd) => {
-    await sendMessageCommand(rl, message, cmd);
+    const userPrompt = message.join(' ');
+    await sendMessageCommand(rl, userPrompt, cmd);
   });
 program.parse(process.argv);
