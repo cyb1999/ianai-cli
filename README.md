@@ -103,8 +103,7 @@ ai config <action> <key> [value]
   
 ####  Examples
 - `ai config get all` (Get the full Settings)
-- `ai config set authToken "your-auth-token" `
-- `ai config get authToken="eyJ....."`
+- `ai config set authToken="eyJ....."`
 - `ai config del authToken`
 
 
