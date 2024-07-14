@@ -1,7 +1,7 @@
 
 <h1 align="center" id="title">Ianai-CLI</h1>
 
-<p id="description">Ianai-CLI is a command-line tool designed to convert natural language into Shell commands.</p>
+<p id="description" align="center">Ianai-CLI is a command-line tool designed to convert natural language into Shell commands.</p>
 
 <p align="center">
    <a href="https://www.npmjs.com/package/ianai-cli"><img src="https://img.shields.io/npm/v/ianai-cli" alt="Current version"></a>
