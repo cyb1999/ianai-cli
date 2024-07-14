@@ -21,7 +21,7 @@ export async function initSettings(rl: readline.Interface) {
     'Enter the API endpoint(default deepseek): '
   );
   const model_class = await askQuestion(rl, 'Enter the model (default deepseek): ');
-  const authorization = await askQuestion(rl, 'Enter the authKey: ');
+  const authorization = await askQuestion(rl, `Enter your auth token: `);
 
   const headers = await askForCustomObject(rl, 'headers');
 

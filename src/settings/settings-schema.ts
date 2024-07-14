@@ -8,8 +8,8 @@ export const settingsSchema = z.object({
   model_class: z.string({
     required_error: "'model_class' is required. (example: 'deepseek_code')",
   }),
-  metadata: z.record(z.string()).optional(),
-  payload: z.record(z.string()),
+  metadata: z.record(z.any()).optional(),
+  payload: z.record(z.string()).optional(),
   headers: z.record(z.string()).optional(),
 });
 

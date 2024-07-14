@@ -78,11 +78,16 @@ export const Set = async (
       await handleSetMetadata(rl, settings);
       break;
     default:
-      if (!value) {
-        logger.error('Invalid command. Usage: config set <key> <value>');
+      if (!key) {
+        logger.error(
+          'Invalid command. Usage: config set <key>=<value> or <key> <value> '
+        );
         return;
       }
-      await handleSetKey(rl, settings, key, value);
+      const [actualKey, actualValue] = key.includes('=')
+        ? key.split('=')
+        : [key, value];
+      await handleSetKey(rl, settings, actualKey, actualValue ?? '');
       break;
   }
 };
