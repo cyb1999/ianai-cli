@@ -169,7 +169,8 @@ export async function sendSingle({
       }
       infoSpin.start('Executing command...');
       try {
-        const { stdout } = await exec(command, { timeout: 50000 });
+        const { stdout } = await exec(command);
+
         infoSpin.stop(
           `✅ Command executed ${stdout ? 'result:' : 'successful!'} \n`
         );
