@@ -48,7 +48,7 @@ export const Del = async (
       break;
     default:
       if (key && !value) {
-        if (!settings.hasOwnProperty(key)) {
+        if (!settings.hasOwnProperty(key) && key !== 'authToken') {
           logger.error(`key '${key}' does not exist in settings`);
           process.exit(0);
         }
@@ -57,14 +57,16 @@ export const Del = async (
           `Are you sure you want to delete the setting '${key}'? (yes/no): `
         );
         if (answer.toLowerCase().trim() === 'yes') {
-          if (settings.hasOwnProperty(key)) {
+          if (key !== 'authToken') {
             infoSpin.start(`Deleting key '${key}' from settings`);
             delete settings[key];
             saveSettings(settings);
             infoSpin.stop(`Deleted key '${key}' from settings`);
           } else {
-            logger.error(`Setting '${key}' not found`);
-            infoSpin.stop();
+            infoSpin.start(`Deleting authToken from headers`);
+            delete settings.headers?.authorization;
+            saveSettings(settings);
+            infoSpin.stop(`Deleted authToken from headers`);
           }
         } else {
           logger.info('Operation canceled. Settings not updated.');
