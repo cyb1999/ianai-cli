@@ -12,9 +12,9 @@
   "repository": "github:cyb1999/ianai-cli.git",
   "scripts": {
     "copy-schema-file": "cp src/ai-response-schema.ts dist/",
-    "build": "pkgroll --minify && pnpm copy-schema-file",
+    "build": "rm -rf dist/ && pkgroll --minify && pnpm copy-schema-file",
     "build:watch": "pkgroll --watch",
-    "start": "jiti ./dist/main.mjs",
+    "start": "jiti ./dist/main.mjs echo Hello World!",
     "dev": "jiti ./src/main.ts",
     "dev:init": "jiti ./src/main.ts --init",
     "dev:version": "jiti ./src/main.ts --version",

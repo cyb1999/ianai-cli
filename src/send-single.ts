@@ -45,6 +45,13 @@ export async function sendSingle({
 }) {
   const settings = await getSettings({ rl });
 
+  if (!settings.headers!.authorization) {
+    logger.error(
+      'AuthToken is required. Please run `ai --init` or `ai config set authToken <your-auth-token>` to set the authorization.'
+    );
+    process.exit(1);
+  }
+
   const payload: Payload = {
     message: '',
     model_class: '',
@@ -137,7 +144,7 @@ export async function sendSingle({
 
     if (command == 'UNKNOWN') {
       logger.error('❌ Command not found');
-      process.exit(1);
+      process.exit(0);
     }
     if (isDangerous) {
       logger.warn('This command is dangerous. Please review before proceeding.');

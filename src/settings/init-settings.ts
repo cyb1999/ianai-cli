@@ -20,15 +20,14 @@ export async function initSettings(rl: readline.Interface) {
     rl,
     'Enter the API endpoint(default deepseek): '
   );
-  const model_class = await askQuestion(
-    rl,
-    'Enter the model class(default deepseek): '
-  );
+  const model_class = await askQuestion(rl, 'Enter the model (default deepseek): ');
+  const authorization = await askQuestion(rl, 'Enter the authKey: ');
+
   const headers = await askForCustomObject(rl, 'headers');
 
   settings.endpoint = endpoint ? endpoint : 'https://chat.deepseek.com/api/v0/chat';
   settings.model_class = model_class ? model_class : 'deepseek_code';
-  settings.headers = headers;
+  settings.headers = { ...headers, authorization };
 
   logger.info(
     `Saving settings at ${settingsFilePath}:\n${JSON.stringify(settings, null, 2)}}`
