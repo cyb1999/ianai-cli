@@ -1,42 +1,78 @@
 import readline from 'readline';
 
-import { askConfirmation } from '../ask-confirmation';
+import { askQuestion } from '../ask-question';
+import { settingsFilePath } from '../constants/settings-constants';
 import { askForCustomObject } from '../settings/init-settings';
 import { saveSettings } from '../settings/save-settings';
-import { settingsFilePath } from '../settings/settings-constants';
-import { Settings } from '../settings/settings-schema';
+import {
+  getDefaults,
+  Settings,
+  settingsSchema,
+  validateSettings,
+} from '../settings/settings-schema';
 import { logger } from '../utils/logger';
+
+const updateFunctions: {
+  [key: string]: (
+    settings: Settings,
+    value: string,
+    rl?: readline.Interface
+  ) => void;
+} = {
+  headers: async (settings, value, rl) => {
+    const headers = await askForCustomObject(rl!, 'headers');
+    settings.headers = { ...settings.headers, ...headers };
+    logger.info(
+      `Saving headers at ${settingsFilePath}:\n${JSON.stringify(
+        settings.headers,
+        null,
+        2
+      )}`
+    );
+  },
+  metadata: async (settings, value, rl) => {
+    const metadata = await askForCustomObject(rl!, 'metadata');
+    settings.metadata = { ...settings.metadata, ...metadata };
+    logger.info(
+      `Saving metadata at ${settingsFilePath}:\n${JSON.stringify(
+        settings.metadata,
+        null,
+        2
+      )}`
+    );
+  },
+  authToken: (settings, value) => {
+    settings.headers = { ...settings.headers, authorization: value };
+    saveSettings(settings);
+    logger.success(`Updated authToken in headers:`, { authorization: value });
+    process.exit(0);
+  },
+  commitment: async (settings, value, rl) => {
+    const { commitment } = getDefaults(settingsSchema);
+    const generate = Number(
+      (await askQuestion(
+        rl!,
+        'Enter the number of commits to generate(default is 1):'
+      )) || commitment.generate
+    );
+    const maxlength = Number(
+      (await askQuestion(
+        rl!,
+        'Enter the maximum length of the commit message(default is 60, maximum 100):'
+      )) || commitment.maxlength
+    );
+    settings.commitment = { ...settings.commitment, generate, maxlength };
+    validateSettings(settings);
+    saveSettings(settings);
+    logger.success(`Updated commitment:`, settings.commitment);
+    process.exit(0);
+  },
+};
 
 const updateSetting = (settings: Settings, key: string, value: string) => {
   settings[key] = value;
   saveSettings(settings);
   logger.success(`Updated:`, { [key]: value });
-};
-
-const handleSetHeaders = async (rl: readline.Interface, settings: Settings) => {
-  const headers = await askForCustomObject(rl, 'headers');
-  settings.headers = { ...settings.headers, ...headers };
-  saveSettings(settings);
-  logger.info(
-    `Saving settings at ${settingsFilePath}:\n${JSON.stringify(
-      settings.headers,
-      null,
-      2
-    )}`
-  );
-};
-
-const handleSetMetadata = async (rl: readline.Interface, settings: Settings) => {
-  const metadata = await askForCustomObject(rl, 'metadata');
-  settings.metadata = { ...settings.metadata, ...metadata };
-  saveSettings(settings);
-  logger.info(
-    `Saving settings at ${settingsFilePath}:\n${JSON.stringify(
-      settings.metadata,
-      null,
-      2
-    )}`
-  );
 };
 
 const handleSetKey = async (
@@ -45,49 +81,21 @@ const handleSetKey = async (
   key: string,
   value: string
 ) => {
-  if (settings.hasOwnProperty(key) && settings[key] !== undefined) {
-    const answer = await askConfirmation(
-      rl,
-      `The setting '${key}' already exists with value '${settings[key]}'. Do you want to override it? (yes/no): `
-    );
-    if (answer.toLowerCase().trim() === 'yes') {
-      updateSetting(settings, key, value);
-    } else {
-      logger.info('Operation canceled. Settings not updated.');
-    }
-  } else if (key === 'authToken') {
-    settings.headers!.authorization = value;
-    saveSettings(settings);
-    logger.success(`Updated authToken in headers:`, { authorization: value });
+  if (updateFunctions[key]) {
+    updateFunctions[key](settings, value, rl);
   } else {
+    validateSettings(settings);
     updateSetting(settings, key, value);
   }
 };
-
 export const Set = async (
   rl: readline.Interface,
   settings: Settings,
   key: string,
   value?: string
 ) => {
-  switch (key) {
-    case 'headers':
-      await handleSetHeaders(rl, settings);
-      break;
-    case 'metadata':
-      await handleSetMetadata(rl, settings);
-      break;
-    default:
-      if (!key) {
-        logger.error(
-          'Invalid command. Usage: config set <key>=<value> or <key> <value> '
-        );
-        return;
-      }
-      const [actualKey, actualValue] = key.includes('=')
-        ? key.split('=')
-        : [key, value];
-      await handleSetKey(rl, settings, actualKey, actualValue ?? '');
-      break;
-  }
+  const [actualKey, actualValue] = key.includes('=')
+    ? key.split('=')
+    : [key, value];
+  await handleSetKey(rl, settings, actualKey, actualValue ?? '');
 };

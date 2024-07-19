@@ -1,9 +1,11 @@
 import readline from 'readline';
 
-import { isDebug } from './send-single';
 import { getHeaders } from './settings/get-headers';
 import { getSettings } from './settings/get-settings';
-import { logger } from './utils/logger';
+import {
+  isDebug,
+  logger,
+} from './utils/logger';
 
 export const clearHistory = async ({ rl }: { rl: readline.Interface }) => {
   const settings = await getSettings({ rl });

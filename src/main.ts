@@ -3,10 +3,10 @@ import { Command } from 'commander';
 import readline from 'readline';
 
 import pageJson from '../package.json';
+import { clearHistory } from './clear-history';
+import commitCommand from './commands/commit';
 import configCommand from './commands/config';
 import sendMessageCommand from './commands/send-message';
-import { initSettings } from './settings/init-settings';
-import { logger } from './utils/logger';
 
 const program = new Command();
 const rl = readline.createInterface({
@@ -17,20 +17,7 @@ program
   .version(pageJson.version)
   .description('A CLI tool to interact with the DeepSeek chat API')
   .option('--debug', 'Enable debug mode')
-  .option('--init', 'Initialize settings')
-  .action(async (cmd) => {
-    if (cmd.debug) {
-      logger.info('Debug mode enabled');
-    }
-
-    if (cmd.init) {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-      });
-      await initSettings(rl);
-    }
-  });
+  .option('--init', 'Initialize settings');
 
 program
   .command('config <action> <key> [value]')
@@ -40,12 +27,30 @@ program
   });
 
 program
+  .command('commit [option]')
+  .description('generate a commit message')
+  .option(
+    '-g, --generate <count>',
+    'generate specified number of commit messages'
+  )
+  .option('-m, --maxlength <length>', 'set maximum length of commit messages')
+  .option(
+    '-t --type <type>',
+    'Formatting submission information according to regular submission specifications'
+  )
+  .action(async (_, cmd) => {
+    await clearHistory({ rl });
+    await commitCommand(rl, cmd);
+  });
+
+program
   .arguments('[args...]')
   .description(
     'Send a message to an AI.\nUsage: ai <your-input-message>\nExample: ai echo Hello, World!'
   )
   .action(async (message, cmd) => {
     const userPrompt = message.join(' ');
+    await clearHistory({ rl });
     await sendMessageCommand(rl, userPrompt, cmd);
   });
 

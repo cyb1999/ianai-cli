@@ -1,4 +1,4 @@
-import { settingsFilePath } from '../settings/settings-constants';
+import { settingsFilePath } from '../constants/settings-constants';
 import { Settings } from '../settings/settings-schema';
 import { logger } from '../utils/logger';
 
@@ -11,21 +11,16 @@ export const Get = (settings: Settings, key: string) => {
         2
       )}`
     );
-    return;
-  }
-  if (key) {
-    if (settings.hasOwnProperty(key)) {
-      logger.info(
-        `Current settings at ${settingsFilePath}:\n${JSON.stringify(
-          { [key]: settings[key] },
-          null,
-          2
-        )}`
-      );
-    } else {
-      logger.error(`Setting '${key}' not found`);
-    }
+  } else if (settings.hasOwnProperty(key) && key !== 'all') {
+    logger.info(
+      `Current settings at ${settingsFilePath}:\n${JSON.stringify(
+        { [key]: settings[key] },
+        null,
+        2
+      )}`
+    );
   } else {
-    logger.error('Invalid command. Usage: config get <key>');
+    logger.error(`Setting '${key}' not found`);
   }
+  process.exit(0);
 };

@@ -4,16 +4,8 @@ export const generateSectionTemplate = (sectionTitle: string, content: string) =
   return `${sectionTitle}:\n${content.trim()}\n`;
 };
 
-export const joinStrings = ({
-  isNewLine = true,
-  args,
-}: {
-  isNewLine?: boolean;
-  args: string[];
-}): string => {
-  const newline = isNewLine ? '\n' : '';
-
-  return args.join(newline);
+export const joinStrings = (args: string[]): string => {
+  return args.join('\n');
 };
 
 export const removedJsonPrefix = (str: string): string => {

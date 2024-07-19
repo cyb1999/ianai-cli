@@ -2,10 +2,17 @@ import fs from 'fs';
 import readline from 'readline';
 
 import { askQuestion } from '../ask-question';
+import {
+  settingsDir,
+  settingsFilePath,
+} from '../constants/settings-constants';
 import { logger } from '../utils/logger';
 import { saveSettings } from './save-settings';
-import { settingsDir, settingsFilePath } from './settings-constants';
-import { Settings } from './settings-schema';
+import {
+  getDefaults,
+  Settings,
+  settingsSchema,
+} from './settings-schema';
 
 export async function initSettings(rl: readline.Interface) {
   fs.mkdirSync(settingsDir, { recursive: true });
@@ -15,22 +22,34 @@ export async function initSettings(rl: readline.Interface) {
     payload: {},
     headers: {},
     metadata: {},
+    commitment: {
+      type: '',
+    },
   };
-  const endpoint = await askQuestion(
-    rl,
-    'Enter the API endpoint(default deepseek): '
-  );
-  const model_class = await askQuestion(rl, 'Enter the model (default deepseek): ');
-  const authorization = await askQuestion(rl, `Enter your auth token: `);
+  const defaultValues = getDefaults(settingsSchema);
+  const endpoint =
+    (await askQuestion(rl, 'Enter the API endpoint(default deepseek): ')) ||
+    defaultValues.endpoint;
 
+  const model_class =
+    (await askQuestion(rl, 'Enter the model (default deepseek): ')) ||
+    defaultValues.model_class;
+
+  const authorization = await askQuestion(rl, `Enter your auth token: `);
   const headers = await askForCustomObject(rl, 'headers');
 
-  settings.endpoint = endpoint ? endpoint : 'https://chat.deepseek.com/api/v0/chat';
-  settings.model_class = model_class ? model_class : 'deepseek_code';
+  settings.endpoint = endpoint;
+  settings.model_class = model_class;
+  settings.commitment = defaultValues.commitment;
+
   settings.headers = { ...headers, authorization };
 
   logger.info(
-    `Saving settings at ${settingsFilePath}:\n${JSON.stringify(settings, null, 2)}}`
+    `Saving settings at ${settingsFilePath}:\n${JSON.stringify(
+      settings,
+      null,
+      2
+    )}}`
   );
 
   saveSettings(settings);

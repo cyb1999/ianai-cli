@@ -1,7 +1,7 @@
 import fs from 'fs';
 
+import { settingsFilePath } from '../constants/settings-constants';
 import { logger } from '../utils/logger';
-import { settingsFilePath } from './settings-constants';
 import { Settings } from './settings-schema';
 
 export function saveSettings(settings: Settings) {
