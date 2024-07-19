@@ -138,7 +138,7 @@ The settings schema defines the configuration structure for integrating with var
 - **commitment** (Optional): Customizes the generation of commit messages. Default values are:
   - `generate`: 1
   - `maxlength`: 60
-  - `type`: `''` (Options include `''` or `'conventional'`. Selecting `'conventional'` will format commit messages according to Conventional Commits specifications)
+  - `type`:`""`Defaults to an empty string, if the type is `conventional`, the submission information will be formatted according to the regular submission specification
 
 ### Command Syntax
 
