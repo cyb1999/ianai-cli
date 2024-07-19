@@ -18,7 +18,7 @@ npm install -g ianai-cli
 
 ## Usage
 
-#### Note: Currently, only DeepSeek Chat is supported, API keys are not supported at this time.
+#### Note: Currently, only DeepSeek Chat is supported, API keys are currently unsupported.
 
 1. Go to [Deepseek](https://chat.deepseek.com/) to get your Auth Token
 
@@ -36,7 +36,7 @@ ai --init
 ai <your-input-message>
 ```
 
-### Example
+### Command Generation
 
 ```bash
 ai echo hello world!
@@ -74,6 +74,45 @@ Be aware that some shells treat specific characters such as ?, \*, or anything r
 ai "what is google's ip?"
 ```
 
+### Commit Message Generation
+
+```bash
+ai commit
+```
+
+Occasionally, the suggested commit message may not be ideal, so you might want to generate several options to choose from. You can produce multiple commit messages simultaneously by using the `-g <i>` flag, where 'i' specifies the number of messages to generate:
+
+```bash
+ai commit -g <i> # or -generate <i>
+```
+
+
+```bash
+ai commit -g 5 #or --generate 5
+```
+
+You can also set a maximum length for each message (up to 100 characters).
+
+```bash
+
+ai commit  -m 100 #or --maxlength 100
+
+```
+
+Of course, you can also set it up together according to the following:
+
+```bash
+ai commit -g 5 -m 100 #or --generate 5 --maxlength 100
+```
+
+Additionally, you can use the `-t` flag to specify the commit message format:
+
+```bash
+ai commit -t conventional #or --type conventional
+```
+
+
+
 ## Configuration
 
 The Ianai-CLI tool employs a structured settings schema to handle various configuration options. Here’s how to set up and comprehend the settings for the tool.
@@ -94,6 +133,10 @@ The settings schema defines the configuration structure for integrating with var
 - **headers** (Optional): A record of strings for custom headers in each request. Each entry is a string value.
 
 - **authToken** (Required): A string value of the authentication token.
+- **commitment** (Optional): Customizes the generation of commit messages. Default values are:
+  - `generate`: 1
+  - `maxlength`: 60
+  - `type`: `''` (Options include `''` or `'conventional'`. Selecting `'conventional'` will format commit messages according to Conventional Commits specifications)
 
 ### Command Syntax
 
@@ -101,7 +144,7 @@ The settings schema defines the configuration structure for integrating with var
 ai config <action> <key> [value]
 ```
 
-- **action**: TSpecifies the action to perform. Valid options are `get`, `set`, or `del`.
+- **action**: Specifies the action to perform. Valid options are `get`, `set`, or `del`.
 - **key**: The key to operate on.
 - **value**: The value to set for the key. This field is only required when the action is `set`.
 
@@ -110,6 +153,10 @@ ai config <action> <key> [value]
 - `ai config get all` (Get the full Settings)
 - `ai config set authToken="eyJ....."`
 - `ai config del authToken`
+
+
+## Credit
+- We also credit Hassan and his work on [aicommits](https://github.com/Nutlope/aicommits) for inspiring the commit message automation feature in this project.
 
 ## License
 
