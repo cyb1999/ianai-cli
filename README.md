@@ -76,7 +76,9 @@ ai "what is google's ip?"
 
 ### Commit Message Generation
 
+Stage your files and use `ai commit`
 ```bash
+git add .
 ai commit
 ```
 
