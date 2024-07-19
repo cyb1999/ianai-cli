@@ -2,11 +2,7 @@ import chalk from 'chalk';
 import clipboardy from 'clipboardy'; // 需要安装 clipboardy 模块
 import { execaCommand } from 'execa';
 
-import {
-  outro,
-  select,
-  spinner,
-} from '@clack/prompts';
+import { outro, select, spinner } from '@clack/prompts';
 
 import { CommandResponse } from './command-response-schema';
 import { systemPrompt } from './constants/settings-constants';
@@ -28,12 +24,12 @@ const selectOptions = {
   options: [
     { value: 'run', label: 'Run command' },
     { value: 'copy', label: 'Copy to clipboard' },
-    { value: 'exit', label: 'Exit' },
-  ],
+    { value: 'exit', label: 'Exit' }
+  ]
 };
 export async function sendSingle({
   message,
-  rl,
+  rl
 }: {
   message: string;
   rl: any;
@@ -51,7 +47,7 @@ export async function sendSingle({
       rl,
       metadata: settings.metadata,
       systemPrompt,
-      message: userMessage,
+      message: userMessage
     });
     infoSpin.stop();
 
@@ -70,7 +66,7 @@ export async function sendSingle({
       try {
         await execaCommand(command, {
           stdio: 'inherit',
-          shell: process.env.SHELL || true,
+          shell: process.env.SHELL || true
         });
       } catch (error) {}
     } else if (selected === 'copy') {

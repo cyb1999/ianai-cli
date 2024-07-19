@@ -2,17 +2,10 @@ import fs from 'fs';
 import readline from 'readline';
 
 import { askQuestion } from '../ask-question';
-import {
-  settingsDir,
-  settingsFilePath,
-} from '../constants/settings-constants';
+import { settingsDir, settingsFilePath } from '../constants/settings-constants';
 import { logger } from '../utils/logger';
 import { saveSettings } from './save-settings';
-import {
-  getDefaults,
-  Settings,
-  settingsSchema,
-} from './settings-schema';
+import { getDefaults, Settings, settingsSchema } from './settings-schema';
 
 export async function initSettings(rl: readline.Interface) {
   fs.mkdirSync(settingsDir, { recursive: true });
@@ -23,8 +16,8 @@ export async function initSettings(rl: readline.Interface) {
     headers: {},
     metadata: {},
     commitment: {
-      type: '',
-    },
+      type: ''
+    }
   };
   const defaultValues = getDefaults(settingsSchema);
   const endpoint =

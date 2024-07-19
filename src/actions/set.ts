@@ -8,7 +8,7 @@ import {
   getDefaults,
   Settings,
   settingsSchema,
-  validateSettings,
+  validateSettings
 } from '../settings/settings-schema';
 import { logger } from '../utils/logger';
 
@@ -66,7 +66,7 @@ const updateFunctions: {
     saveSettings(settings);
     logger.success(`Updated commitment:`, settings.commitment);
     process.exit(0);
-  },
+  }
 };
 
 const updateSetting = (settings: Settings, key: string, value: string) => {

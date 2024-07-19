@@ -2,10 +2,7 @@ import readline from 'readline';
 
 import { getHeaders } from './settings/get-headers';
 import { getSettings } from './settings/get-settings';
-import {
-  isDebug,
-  logger,
-} from './utils/logger';
+import { isDebug, logger } from './utils/logger';
 
 export const clearHistory = async ({ rl }: { rl: readline.Interface }) => {
   const settings = await getSettings({ rl });
@@ -13,14 +10,14 @@ export const clearHistory = async ({ rl }: { rl: readline.Interface }) => {
 
   const payload = {
     model_class: settings.model_class,
-    append_welcome_message: false,
+    append_welcome_message: false
   };
 
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: getHeaders(settings),
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
     if (response.ok && isDebug) {

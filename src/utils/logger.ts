@@ -18,11 +18,13 @@ export const logger = {
   },
   break() {
     console.log('');
-  },
+  }
 };
 
 function formatArgs(args: any[]) {
   return args.map((arg) =>
-    typeof arg === 'string' ? arg : util.inspect(arg, { colors: true, depth: null })
+    typeof arg === 'string'
+      ? arg
+      : util.inspect(arg, { colors: true, depth: null })
   );
 }

@@ -7,7 +7,7 @@ export const settingsSchema = z.object({
   endpoint: z.string().url().default('https://chat.deepseek.com/api/v0/chat'),
   model_class: z
     .string({
-      required_error: "'model_class' is required. (example: 'deepseek_code')",
+      required_error: "'model_class' is required. (example: 'deepseek_code')"
     })
     .default('deepseek_code'),
   metadata: z.record(z.any()).optional(),
@@ -17,9 +17,9 @@ export const settingsSchema = z.object({
     .object({
       generate: z.number().max(10).optional(),
       maxlength: z.number().max(100).optional(),
-      type: z.enum(['', 'conventional']),
+      type: z.enum(['', 'conventional'])
     })
-    .default({ generate: 1, maxlength: 60, type: '' }),
+    .default({ generate: 1, maxlength: 60, type: '' })
 });
 
 export type Settings = z.infer<typeof settingsSchema>;

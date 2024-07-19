@@ -43,7 +43,9 @@ export const Del = async (
           infoSpin.stop();
         }
       } else {
-        logger.error('Invalid command. Usage: config del metadata <metadataKey>');
+        logger.error(
+          'Invalid command. Usage: config del metadata <metadataKey>'
+        );
       }
       break;
     default:

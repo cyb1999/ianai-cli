@@ -1,7 +1,4 @@
-import {
-  isNil,
-  omitBy,
-} from 'es-toolkit';
+import { isNil, omitBy } from 'es-toolkit';
 import fs from 'fs';
 import readline from 'readline';
 
@@ -13,12 +10,12 @@ import {
   getDefaults,
   Settings,
   settingsSchema,
-  validateSettings,
+  validateSettings
 } from './settings-schema';
 
 export async function getSettings({
   rl,
-  argv,
+  argv
 }: {
   rl: readline.Interface;
   argv?: Partial<Settings>;
@@ -39,7 +36,7 @@ export async function getSettings({
       settings = omitBy(
         {
           ...defaultSettings,
-          ...safeJsonParse(settingsFile),
+          ...safeJsonParse(settingsFile)
         },
         isNil
       );
@@ -59,10 +56,10 @@ export async function getSettings({
         {
           ...defaultSettings.commitment,
           ...settings.commitment,
-          ...argv.commitment,
+          ...argv.commitment
         },
         isNil
-      ) as Settings['commitment'],
+      ) as Settings['commitment']
     };
   }
 

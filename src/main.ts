@@ -11,7 +11,7 @@ import sendMessageCommand from './commands/send-message';
 const program = new Command();
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout,
+  output: process.stdout
 });
 program
   .version(pageJson.version)

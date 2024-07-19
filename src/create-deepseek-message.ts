@@ -1,22 +1,19 @@
 import { type Payload } from './send-single';
 import { getHeaders } from './settings/get-headers';
 import { getSettings } from './settings/get-settings';
-import {
-  isDebug,
-  logger,
-} from './utils/logger';
+import { isDebug, logger } from './utils/logger';
 import { safeJsonParse } from './utils/parse';
 import {
   generateSectionTemplate,
   joinStrings,
-  removedJsonPrefix,
+  removedJsonPrefix
 } from './utils/str';
 
 export async function createDeepseekMessage<T>({
   rl,
   message,
   metadata,
-  systemPrompt,
+  systemPrompt
 }: {
   rl: any;
   message: string;
@@ -44,7 +41,7 @@ export async function createDeepseekMessage<T>({
     model_class: '',
     stream: true,
     model_preference: null,
-    temperature: 0,
+    temperature: 0
   };
 
   if (settings.model_class) {
@@ -79,7 +76,7 @@ export async function createDeepseekMessage<T>({
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: getHeaders(settings),
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   });
 
   if (!response.ok) {

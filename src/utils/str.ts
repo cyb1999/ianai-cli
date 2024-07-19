@@ -1,6 +1,9 @@
 import { logger } from './logger';
 
-export const generateSectionTemplate = (sectionTitle: string, content: string) => {
+export const generateSectionTemplate = (
+  sectionTitle: string,
+  content: string
+) => {
   return `${sectionTitle}:\n${content.trim()}\n`;
 };
 

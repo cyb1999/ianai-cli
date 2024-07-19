@@ -15,13 +15,14 @@
   "repository": "github:cyb1999/ianai-cli.git",
   "scripts": {
     "copy-schema-files": "cp src/*-schema.ts dist/",
-    "build": "rm -rf dist/ && pkgroll --minify && pnpm copy-schema-file",
+    "build": "rm -rf dist/ && pkgroll --minify && pnpm copy-schema-files",
     "build:watch": "pkgroll --watch",
-    "start": "jiti ./dist/main.mjs echo Hello World!",
+    "start": "jiti ./dist/main.mjs",
     "dev": "jiti ./src/main.ts",
     "dev:init": "jiti ./src/main.ts --init",
     "dev:version": "jiti ./src/main.ts --version",
-    "release:patch": "pnpm version patch && pnpm build && npm publish && git push --follow-tags"
+    "release:patch": "pnpm version patch && pnpm build && npm publish && git push --follow-tags",
+    "format-code": "prettier --write ."
   },
   "author": "Ian <https://github.com/cyb1999>",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "@types/node": "^20.14.10",
     "jiti": "^1.21.6",
     "pkgroll": "^2.1.1",
+    "prettier": "^3.3.3",
     "typescript": "^5.5.3"
   },
   "keywords": [

@@ -17,7 +17,7 @@ const configCommand = async (
   const actions: Record<string, () => Promise<void> | void> = {
     get: () => Get(settings, key),
     set: async () => await Set(rl, settings, key, value),
-    del: async () => await Del(rl, settings, key, value),
+    del: async () => await Del(rl, settings, key, value)
   };
 
   if (actions[action]) {
