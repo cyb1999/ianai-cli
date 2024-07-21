@@ -83,13 +83,7 @@ export async function createDeepseekMessage<T>({
     throw new Error(`Failed to send message to endpoint: ${endpoint}`);
   }
 
-  const data = await response.json();
-  if (data.code) {
-    logger.error(`Failed to send message`, data);
-    process.exit(0);
-  }
-
-  const responseText = JSON.stringify(data);
+  const responseText = await response.text();
 
   if (isDebug) {
     logger.info('responseText', responseText);
