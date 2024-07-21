@@ -19,9 +19,14 @@ export const clearHistory = async ({ rl }: { rl: readline.Interface }) => {
       headers: getHeaders(settings),
       body: JSON.stringify(payload)
     });
-
+    const data = await response.json();
     if (response.ok && isDebug) {
-      logger.info('History cleared', await response.json());
+      logger.info('History cleared', data);
+    }
+
+    if (data.code) {
+      logger.error(`Failed to clear history`, data);
+      process.exit(0);
     }
   } catch (error) {
     logger.error(`Failed to clear history:`, error);
