@@ -2,30 +2,17 @@ import chalk from 'chalk';
 import { execa } from 'execa';
 import readline from 'readline';
 
-import {
-  confirm,
-  isCancel,
-  outro,
-  select,
-  spinner,
-} from '@clack/prompts';
+import { confirm, isCancel, outro, select, spinner } from '@clack/prompts';
 
-import {
-  Commitment,
-  CommitType,
-} from '../constants/commit-constant';
+import { Commitment, CommitType } from '../constants/commit-constant';
 import { createDeepseekMessage } from '../create-deepseek-message';
 import { MessageResponse } from '../message-response-schema';
 import { getSettings } from '../settings/get-settings';
-import {
-  getDetectedMessage,
-  getStagedDiff,
-} from '../utils/git';
-import {
-  isDebug,
-  logger,
-} from '../utils/logger';
+import { getDetectedMessage, getStagedDiff } from '../utils/git';
+import { isDebug, logger } from '../utils/logger';
 import { generatePrompt } from '../utils/prompt';
+import { initSettings } from '../settings/init-settings';
+import { clearHistory } from '../clear-history';
 
 const commitCommand = async (
   rl: readline.Interface,
@@ -33,11 +20,15 @@ const commitCommand = async (
     generate: number | undefined;
     maxlength: number | undefined;
     type: CommitType;
+    init: string;
   }
 ) => {
-  let commitment: Commitment = {
-    type: '',
-  };
+  if (argv.init) {
+    await initSettings(rl);
+  }
+  await clearHistory({ rl });
+
+  let commitment: Commitment = {};
 
   if (argv.generate) {
     commitment.generate = Number(argv.generate);
@@ -53,8 +44,8 @@ const commitCommand = async (
   const settings = await getSettings({
     rl,
     argv: {
-      commitment,
-    },
+      commitment
+    }
   });
 
   const { generate, maxlength, type } = settings.commitment;
@@ -86,7 +77,7 @@ const commitCommand = async (
     response = await createDeepseekMessage<MessageResponse>({
       rl,
       systemPrompt: generatePrompt('en', maxlength!, type!, generate!),
-      message: staged?.diff,
+      message: staged?.diff
     });
   } catch (error) {
   } finally {
@@ -96,7 +87,7 @@ const commitCommand = async (
   if (response.action === 'message') {
     message = response.message;
     const confirmed = await confirm({
-      message: `Use this commit message?\n\n${chalk.cyan(message)}\n`,
+      message: `Use this commit message?\n\n${chalk.cyan(message)}\n`
     });
 
     if (!confirmed || isCancel(confirmed)) {
@@ -109,8 +100,8 @@ const commitCommand = async (
       message: 'Please select a commit message template:',
       options: response.messages.map((value) => ({
         label: value,
-        value,
-      })),
+        value
+      }))
     });
 
     if (isCancel(selected)) {

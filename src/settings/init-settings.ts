@@ -15,9 +15,7 @@ export async function initSettings(rl: readline.Interface) {
     payload: {},
     headers: {},
     metadata: {},
-    commitment: {
-      type: ''
-    }
+    commitment: {}
   };
   const defaultValues = getDefaults(settingsSchema);
   const endpoint =

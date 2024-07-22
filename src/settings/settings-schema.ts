@@ -17,7 +17,7 @@ export const settingsSchema = z.object({
     .object({
       generate: z.number().max(10).optional(),
       maxlength: z.number().max(100).optional(),
-      type: z.enum(['', 'conventional'])
+      type: z.enum(['', 'conventional']).optional(),
     })
     .default({ generate: 1, maxlength: 60, type: '' })
 });

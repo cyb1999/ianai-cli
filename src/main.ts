@@ -39,7 +39,6 @@ program
     'Formatting submission information according to regular submission specifications'
   )
   .action(async (_, cmd) => {
-    await clearHistory({ rl });
     await commitCommand(rl, cmd);
   });
 
@@ -50,7 +49,6 @@ program
   )
   .action(async (message, cmd) => {
     const userPrompt = message.join(' ');
-    await clearHistory({ rl });
     await sendMessageCommand(rl, userPrompt, cmd);
   });
 
