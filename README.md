@@ -22,7 +22,7 @@ npm install -g ianai-cli
 
 1. Go to [Deepseek](https://chat.deepseek.com/) to get your Auth Token
 
-![screenshot](https://github.com/user-attachments/assets/b4cd8f5c-e205-4742-8e11-e1d08d68ddc2)
+![screenshot](https://github.com/user-attachments/assets/95cff635-7fac-4aae-bd41-98cce835a8d0)
 
 2. Initialize Settings and set your auth token
 
@@ -153,7 +153,7 @@ ai config <action> <key> [value]
 #### Examples
 
 - `ai config get all` (Get the full Settings)
-- `ai config set authToken="eyJ....."`
+- `ai config set authToken="...."`
 - `ai config del authToken`
 
 
