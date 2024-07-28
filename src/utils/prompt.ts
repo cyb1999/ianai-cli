@@ -11,7 +11,7 @@ const schemaString = fs.readFileSync(
 
 const commitTypeFormats: Record<CommitType, string> = {
   '': '<commit message>',
-  conventional: '<type>(<optional scope>): <commit message>',
+  conventional: '<type>(<optional scope>): <commit message>'
 };
 const specifyCommitFormat = (type: CommitType) =>
   `The output response must be in format:\n${commitTypeFormats[type]}`;
@@ -40,11 +40,11 @@ const commitTypes: Record<string, string> = {
       chore: "Other changes that don't modify src or test files",
       revert: 'Reverts a previous commit',
       feat: 'A new feature',
-      fix: 'A bug fix',
+      fix: 'A bug fix'
     },
     null,
     2
-  )}`,
+  )}`
 };
 
 export const generatePrompt = (
@@ -56,14 +56,14 @@ export const generatePrompt = (
   [
     'Generate a concise git commit message written in present tense for the following code diff with the given specifications below:',
     `Message language: ${locale}`,
-    `Message count: ${messageCount}`,
+    `Messages to generate: ${messageCount}`,
     `Commit message must be a maximum of ${maxlength} characters.`,
     'Exclude anything unnecessary such as translation. Your entire response will be passed directly into git commit.',
     `Strictly follow the following json format to output the translated instructions:
 	Respond only in JSON that satisfies the Response type:
 	${schemaString.replace(/^(import|export) .*;$/gm, '').trim()}`,
     commitTypes[type],
-    specifyCommitFormat(type),
+    specifyCommitFormat(type)
   ]
     .filter(Boolean)
     .join('\n');
