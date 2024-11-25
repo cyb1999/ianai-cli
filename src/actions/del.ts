@@ -6,14 +6,11 @@ import { askConfirmation } from '../ask-confirmation';
 import { saveSettings } from '../settings/save-settings';
 import { Settings } from '../settings/settings-schema';
 import { logger } from '../utils/logger';
+import { appContext } from '../app-context';
 
-export const Del = async (
-  rl: readline.Interface,
-  settings: Settings,
-  key: string,
-  value?: string
-) => {
+export const Del = async (settings: Settings, key: string, value?: string) => {
   const infoSpin = spinner();
+  const rl = appContext.rl;
 
   switch (key) {
     case 'header':

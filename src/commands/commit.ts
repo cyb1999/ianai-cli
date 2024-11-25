@@ -5,30 +5,27 @@ import readline from 'readline';
 import { confirm, isCancel, outro, select, spinner } from '@clack/prompts';
 
 import { Commitment, CommitType } from '../constants/commit-constant';
-import { createDeepseekMessage } from '../create-deepseek-message';
+import { createMessage } from '../create-message';
 import { MessageResponse } from '../message-response-schema';
 import { getSettings } from '../settings/get-settings';
 import { getDetectedMessage, getStagedDiff } from '../utils/git';
 import { isDebug, logger } from '../utils/logger';
 import { generatePrompt } from '../utils/prompt';
 import { initSettings } from '../settings/init-settings';
-import { clearHistory } from '../clear-history';
+import { appContext } from '../app-context';
 
-const commitCommand = async (
-  rl: readline.Interface,
-  argv: {
-    generate: number | undefined;
-    maxlength: number | undefined;
-    type: CommitType;
-    init: string;
-  }
-) => {
+const commitCommand = async (argv: {
+  generate: number | undefined;
+  maxlength: number | undefined;
+  type: CommitType;
+  init: string;
+}) => {
+  const rl = appContext.rl;
   if (argv.init) {
     await initSettings(rl);
   }
-  await clearHistory({ rl });
 
-  let commitment: Commitment = {};
+  let commitment: Commitment = { type: '' };
 
   if (argv.generate) {
     commitment.generate = Number(argv.generate);
@@ -42,7 +39,6 @@ const commitCommand = async (
   }
 
   const settings = await getSettings({
-    rl,
     argv: {
       commitment
     }
@@ -74,8 +70,7 @@ const commitCommand = async (
   let message = '';
   let response = {} as MessageResponse;
   try {
-    response = await createDeepseekMessage<MessageResponse>({
-      rl,
+    response = await createMessage<MessageResponse>({
       systemPrompt: generatePrompt('en', maxlength!, type!, generate!),
       message: staged?.diff
     });

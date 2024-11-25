@@ -6,31 +6,37 @@ import { settingsDir, settingsFilePath } from '../constants/settings-constants';
 import { logger } from '../utils/logger';
 import { saveSettings } from './save-settings';
 import { getDefaults, Settings, settingsSchema } from './settings-schema';
+import { select } from '@clack/prompts';
+import { providerType, ProviderType, providerTypeList } from '../providers';
 
 export async function initSettings(rl: readline.Interface) {
   fs.mkdirSync(settingsDir, { recursive: true });
   let settings: Settings = {
     endpoint: '',
-    model_class: '',
     payload: {},
     headers: {},
     metadata: {},
-    commitment: {}
+    commitment: { type: '' },
+    provider: providerType.kimi
   };
   const defaultValues = getDefaults(settingsSchema);
+
+  const provider = (await askQuestion(
+    rl,
+    'Select one Model:',
+    providerTypeList
+  )) as ProviderType;
+
   const endpoint =
-    (await askQuestion(rl, 'Enter the API endpoint(default deepseek): ')) ||
+    (await askQuestion(rl, 'Enter the API endpoint(default kimi): ')) ||
     defaultValues.endpoint;
 
-  const model_class =
-    (await askQuestion(rl, 'Enter the model (default deepseek): ')) ||
-    defaultValues.model_class;
-
   const authorization = await askQuestion(rl, `Enter your auth token: `);
+
   const headers = await askForCustomObject(rl, 'headers');
 
+  settings.provider = provider;
   settings.endpoint = endpoint;
-  settings.model_class = model_class;
   settings.commitment = defaultValues.commitment;
 
   settings.headers = { ...headers, authorization };

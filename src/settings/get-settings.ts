@@ -12,17 +12,16 @@ import {
   settingsSchema,
   validateSettings
 } from './settings-schema';
+import { appContext } from '../app-context';
 
 export async function getSettings({
-  rl,
-  argv
+  argv = {}
 }: {
-  rl: readline.Interface;
   argv?: Partial<Settings>;
-}): Promise<Settings> {
+} = {}): Promise<Settings> {
   let settings: Partial<Settings> = {};
   const defaultSettings = getDefaults(settingsSchema);
-
+  const rl = appContext.rl;
   let settingsFile: string | undefined;
   try {
     settingsFile = fs.readFileSync(settingsFilePath, 'utf8');

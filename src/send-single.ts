@@ -6,18 +6,10 @@ import { outro, select, spinner } from '@clack/prompts';
 
 import { CommandResponse } from './command-response-schema';
 import { systemPrompt } from './constants/settings-constants';
-import { createDeepseekMessage } from './create-deepseek-message';
+import { createMessage } from './create-message';
 import { getSettings } from './settings/get-settings';
 import { logger } from './utils/logger';
 import { generateSectionTemplate } from './utils/str';
-
-export type Payload = {
-  message: string;
-  model_class: string;
-  stream: boolean;
-  model_preference: string | null;
-  temperature: number;
-};
 
 const selectOptions = {
   message: 'Select one option:',
@@ -28,14 +20,12 @@ const selectOptions = {
   ]
 };
 export async function sendSingle({
-  message,
-  rl
+  message
 }: {
   message: string;
-  rl: any;
   isError?: boolean;
 }) {
-  const settings = await getSettings({ rl });
+  const settings = await getSettings();
 
   const userMessage = generateSectionTemplate('User Prompt', `${message}`);
 
@@ -43,8 +33,7 @@ export async function sendSingle({
   infoSpin.start('Sending message to AI...');
 
   try {
-    const response = await createDeepseekMessage<CommandResponse>({
-      rl,
+    const response = await createMessage<CommandResponse>({
       metadata: settings.metadata,
       systemPrompt,
       message: userMessage

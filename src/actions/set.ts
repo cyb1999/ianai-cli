@@ -11,6 +11,7 @@ import {
   validateSettings
 } from '../settings/settings-schema';
 import { logger } from '../utils/logger';
+import { appContext } from '../app-context';
 
 const updateFunctions: {
   [key: string]: (
@@ -73,14 +74,11 @@ const updateSetting = (settings: Settings, key: string, value: string) => {
   settings[key] = value;
   saveSettings(settings);
   logger.success(`Updated:`, { [key]: value });
+  process.exit(0);
 };
 
-const handleSetKey = async (
-  rl: readline.Interface,
-  settings: Settings,
-  key: string,
-  value: string
-) => {
+const handleSetKey = async (settings: Settings, key: string, value: string) => {
+  const rl = appContext.rl;
   if (updateFunctions[key]) {
     updateFunctions[key](settings, value, rl);
   } else {
@@ -88,14 +86,9 @@ const handleSetKey = async (
     updateSetting(settings, key, value);
   }
 };
-export const Set = async (
-  rl: readline.Interface,
-  settings: Settings,
-  key: string,
-  value?: string
-) => {
+export const Set = async (settings: Settings, key: string, value?: string) => {
   const [actualKey, actualValue] = key.includes('=')
     ? key.split('=')
     : [key, value];
-  await handleSetKey(rl, settings, actualKey, actualValue ?? '');
+  await handleSetKey(settings, actualKey, actualValue ?? '');
 };

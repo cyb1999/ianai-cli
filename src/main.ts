@@ -3,19 +3,23 @@ import { Command } from 'commander';
 import readline from 'readline';
 
 import pageJson from '../package.json';
-import { clearHistory } from './clear-history';
+
 import commitCommand from './commands/commit';
 import configCommand from './commands/config';
 import sendMessageCommand from './commands/send-message';
+import { appContext } from './app-context';
 
 const program = new Command();
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
+appContext.init(rl);
+
 program
   .version(pageJson.version)
-  .description('A CLI tool to interact with the DeepSeek chat API')
+  .description('A CLI tool to interact with the Kimi chat API')
   .option('--debug', 'Enable debug mode')
   .option('--init', 'Initialize settings');
 
@@ -23,7 +27,7 @@ program
   .command('config <action> <key> [value]')
   .description('Manage configuration')
   .action(async (action, key, value) => {
-    await configCommand(rl, action, key, value);
+    await configCommand(action, key, value);
   });
 
 program
@@ -39,7 +43,7 @@ program
     'Formatting submission information according to regular submission specifications'
   )
   .action(async (_, cmd) => {
-    await commitCommand(rl, cmd);
+    await commitCommand(cmd);
   });
 
 program

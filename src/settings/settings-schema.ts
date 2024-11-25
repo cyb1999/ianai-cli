@@ -2,14 +2,10 @@ import { z } from 'zod';
 
 import { settingsDir } from '../constants/settings-constants';
 import { logger } from '../utils/logger';
+import { providerType } from '../providers';
 
 export const settingsSchema = z.object({
-  endpoint: z.string().url().default('https://chat.deepseek.com/api/v0/chat'),
-  model_class: z
-    .string({
-      required_error: "'model_class' is required. (example: 'deepseek_code')"
-    })
-    .default('deepseek_code'),
+  endpoint: z.string().url().default('https://kimi.moonshot.cn/api'),
   metadata: z.record(z.any()).optional(),
   payload: z.record(z.string()).optional(),
   headers: z.record(z.string()).optional(),
@@ -19,7 +15,9 @@ export const settingsSchema = z.object({
       maxlength: z.number().max(100).optional(),
       type: z.enum(['', 'conventional']).optional().default('')
     })
-    .default({ generate: 1, maxlength: 60, type: '' })
+    .default({ generate: 1, maxlength: 60, type: '' }),
+  proxy: z.string().url().optional(),
+  provider: z.enum(['kimi']).default('kimi')
 });
 
 export type Settings = z.infer<typeof settingsSchema>;
